@@ -1,0 +1,21 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// Couleurs bordeaux personnalisées
+a {
+  color: #800020;
+}
+a:hover {
+  color: #a61b2d;
+}
+
+h1, h2, h3 {
+  color: #800020;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  color: #222;
+}
