@@ -1,3 +1,7 @@
+---
+layout: default
+title: "Jules Pariente – Portfolio"
+---
 
 # Jules Pariente – Portfolio
 
