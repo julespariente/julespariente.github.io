@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jules Pariente – Portfolio</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      background-color: #fff;
+      color: #1e1e1e;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    header h1 {
+      color: #800020;
+      font-size: 36px;
+      margin: 0;
+    }
+    header h2 {
+      color: #800020;
+      font-weight: normal;
+      font-size: 20px;
+      margin: 5px 0 0 0;
+    }
+    header h3 {
+      color: #444;
+      font-size: 16px;
+      margin: 5px 0 0 0;
+    }
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #800020;
+      margin-top: 20px;
+      margin-bottom: 50px;
+    }
+    a {
+      color: #800020;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Jules Pariente</h1>
+  <h2>Étudiant M1 IREF – Université de Bordeaux</h2>
+  <h3>Analyse des données, modélisation, statistiques</h3>
+  <hr>
+</header>
+
+  
+<div style="margin-bottom: 50px; border-left: 4px solid #800020; padding-left: 20px;">
+  <h2 style="color:#800020;">💊 Invalid Drug Promotion in COVID-19</h2>
+  
+  <p><strong>Sujet :</strong> Évaluation de l’impact économique de la promotion non fondée de l’hydroxychloroquine pendant la pandémie.</p>
+  
+  <p><strong>Description :</strong>  
+    Pendant la crise du COVID-19, certains médicaments comme l’hydroxychloroquine et l’azithromycine ont fait l’objet de communications erronées et non fondées.  
+    Ce projet évalue le surcoût induit par cette mésinformation en analysant les remboursements de l’Assurance Maladie pour ces traitements.  
+    Une analyse en séries temporelles interrompues a été réalisée (modèles ARIMA avec intervention) sur la période de janvier 2015 à mars 2022.
+    👉 <a href="assets/Series_Medicaments.R" target="_blank" style="color:#800020;">Voir le code R</a>
+  </p>
+  
+  <p><strong>Méthodologie :</strong>  
+    - Données SNDS (base Medic’Am)  
+    - ARIMA avec variable d’intervention (février/mars 2020)  
+    - Comparaison avant/après et estimation des coûts excédentaires  
+    - Contrôle négatif avec les anti-TNF
+  </p>
+  
+  <p><strong>Résultat :</strong> Un excès de remboursement supérieur à 1 million d’euros a été estimé, soit environ 12 % au-dessus de l’attendu. Aucun effet similaire observé pour les traitements de contrôle.</p>
+  
+  <p><strong>Soumission :</strong> Projet soumis au congrès SFPT 2025 (abstract n°00161).  
+    👉 <a href="assets/Abstract_00161.pdf" target="_blank" style="color:#800020;">Lire l’abstract</a>
+  </p>
+  
+  <a href="https://github.com/julespariente/series-hcq-mispromotion" target="_blank" style="color:#800020; text-decoration:underline;">🔗 Voir le projet sur GitHub</a>
+</div>
+</body>
+</html>
