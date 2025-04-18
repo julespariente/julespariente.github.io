@@ -1,1 +1,12 @@
+title: "Jules Pariente – Portfolio"
+description: "Projets en statistiques, modélisation et analyse des données"
 theme: minima
+
+# Couleurs personnalisées (nécessite un fichier CSS custom)
+sass:
+  style: compressed
+
+# Personnalisation des liens
+header_pages:
+  - index.md
+
