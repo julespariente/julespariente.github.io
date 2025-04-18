@@ -13,3 +13,6 @@ header_pages:
 sass:
   load_paths:
     - _sass
+
+head:
+  favicon: /favicon.ico
