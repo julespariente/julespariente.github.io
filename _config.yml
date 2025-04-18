@@ -10,3 +10,6 @@ sass:
 header_pages:
   - index.md
 
+sass:
+  load_paths:
+    - _sass
