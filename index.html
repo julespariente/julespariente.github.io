@@ -83,31 +83,52 @@
 </div>
 <!-- Projet 2 -->
 <div style="margin-bottom: 50px; border-left: 4px solid #003366; padding-left: 20px;">
+  <h2 style="color:#003366;"> Analyse Économétrique des Rendements de l'Action RIG – Projet R/RStudio</h2>
+  <p><strong>Sujet :</strong> Réaliser l'analyse économétrique des rendements logarithmiques d'un actif financier et en déduire un modèle de Volatilité (GARCH) optimal pour la Modélisation du Risque (VaR).</p>
+  <p><strong>Description :</strong> 
+    Ce projet s'est concentré sur l'étude des <strong>huit propriétés des rendements des actifs financiers</strong> appliquées à l'action <strong>RIG</strong> (Forage Offshore), sur une base de données de 2730 observations (2015-2025). L'analyse a confirmé que la série était <strong>stationnaire</strong> mais présentait une <strong>leptokurticité massive</strong> (queues épaisses) et de forts <strong>clusters de volatilité</strong> (autocorrélation au carré). Ces résultats ont justifié l'utilisation de modèles <strong>GARCH</strong> avec une <strong>Loi de Student</strong> pour les erreurs et ont confirmé l'existence d'un <strong>Effet de Levier</strong> asymétrique.
+  </p>
+  <p><strong>Étapes principales :</strong><br>
+    - <strong>Vérification des Propriétés :</strong> Analyse des 8 propriétés statistiques (stationnarité, skewness, kurtosis, saisonnalité, etc.). <br>
+    - <strong>Modélisation Linéaire :</strong> Identification et estimation d'un modèle <strong>ARMA</strong> pour capturer la faible dépendance linéaire des rendements.<br>
+    - <strong>Modélisation de Volatilité :</strong> Identification et estimation d'un modèle <strong>ARCH(10)</strong> (ou GARCH asymétrique) pour capturer les clusters de volatilité et l'effet de levier.<br>
+    - <strong>Distribution des Chocs :</strong> Utilisation de la <strong>Loi de Student</strong> pour les erreurs afin de modéliser le kurtosis résiduel et les queues épaisses.<br>
+    - <strong>Analyse de Saisonnalité :</strong> Étude des statistiques par jour de la semaine et par mois, révélant une <strong>Saisonnalité Journalière Forte</strong> (Lundi le plus volatil et performant).
+  </p>
+  <p><strong>Fichiers du projet :</strong><br>
+    - <a href="assets/RIG_Pariente.pdf" target="_blank">Rapport d'Analyse (PDF)</a><br>
+    - <a href="assets/Annexe.pdf" target="_blank">Annexe et Synthèse des Tests (PDF)</a><br>
+    - <a href="assets/RTE_RIG.Rmd" target="_blank">Code R - Échantillon d'Estimation (RMarkdown)</a><br>
+    - <a href="assets/RTT_RIG.Rmd" target="_blank">Code R - Échantillon de Test et Saisonnalité (RMarkdown)</a>
+  </p>
+</div>
+<!-- Projet 3 -->
+<div style="margin-bottom: 50px; border-left: 4px solid #003366; padding-left: 20px;">
   <h2 style="color:#003366;">  Gestion d'un Mercato Footballistique – Projet VBA Excel</h2>
   <p><strong>Sujet :</strong> Simuler de manière réaliste les opérations de transfert de joueurs tout en respectant des contraintes budgétaires propres à chaque club de football professionnel.</p>
   <p><strong>Description :</strong> 
-    Ce projet est une application VBA développée dans Excel pour imiter un outil de gestion de mercato. L'objectif principal était de __modéliser la mécanique complète des transferts__ et d'assurer un __suivi financier rigoureux__[cite: 99, 145]. L'application gère une base de données de joueurs [cite: 81], permet la saisie d'offres de transfert, et ajuste automatiquement les budgets des clubs acheteurs et vendeurs de manière fidèle aux logiques financières réelles du football[cite: 112, 113, 114, 147].
+    Ce projet est une application VBA développée dans Excel pour imiter un outil de gestion de mercato. L'objectif principal était de modéliser la mécanique complète des transferts et d'assurer un suivi financier rigoureux[cite: 99, 145]. L'application gère une base de données de joueurs [cite: 81], permet la saisie d'offres de transfert, et ajuste automatiquement les budgets des clubs acheteurs et vendeurs de manière fidèle aux logiques financières réelles du football.
   </p>
   <p><strong>Étapes principales :</strong><br>
-    - __Base de Données Joueurs :__ Construction d'une base de données centralisant le nom, poste, âge, club, valeur marchande et statut (à vendre, ciblé, etc.). Alimentation par importation Excel ou UserForm.<br>
-    - __Gestion des Transferts :__ Développement d'un UserForm ("Faire une offre") pour enregistrer les transactions. L'opération met à jour l'affiliation du joueur et impacte les budgets.<br>
-    - __Règles de Réalisme :__ Intégration d'une contrainte empêchant les offres inférieures à 90% de la valeur marchande du joueur.<br>
-    - __Suivi Budgétaire :__ Création d'une feuille "Budgets clubs" avec budget initial, calcul automatique des ventes/achats/salaires, et alerte visuelle (couleur rouge) si le budget devient négatif.<br>
-    - __Historique et Recherche :__ Mise en place d'un système d'historique des transferts et d'un outil de recherche multicritère de joueurs via UserForms.
+    - Base de Données Joueurs : Construction d'une base de données centralisant le nom, poste, âge, club, valeur marchande et statut (à vendre, ciblé, etc.). Alimentation par importation Excel ou UserForm.<br>
+    - Gestion des Transferts : Développement d'un UserForm ("Faire une offre") pour enregistrer les transactions. L'opération met à jour l'affiliation du joueur et impacte les budgets.<br>
+    - Règles de Réalisme : Intégration d'une contrainte empêchant les offres inférieures à 90% de la valeur marchande du joueur.<br>
+    - Suivi Budgétaire : Création d'une feuille "Budgets clubs" avec budget initial, calcul automatique des ventes/achats/salaires, et alerte visuelle (couleur rouge) si le budget devient négatif.<br>
+    - Historique et Recherche : Mise en place d'un système d'historique des transferts et d'un outil de recherche multicritère de joueurs via UserForms.
   </p>
   <p><strong>Visualisation (UserForms clés) :</strong><br>
-    - __Saisie de Joueur :__  <br>
-    - __Faire une Offre :__  <br>
-    - __Recherche de Joueurs :__  <br>
-    - __Suivi Budget :__ 
+    - Saisie de Joueur   <br>
+    - Faire une Offre   <br>
+    - Recherche de Joueurs   <br>
+    - Suivi Budget  
   </p>
   <p><strong>Fichiers du projet :</strong><br>
     <a href="assets/ProjetVBAMercato.xlsm" target="_blank">Télécharger le fichier Excel (.xlsm)</a>
     <a href="assets/ProjetVBAMercato.pdf" target="_blank">Télécharger le pdf</a>
   </p>
-  <p><strong>Co-auteurs :</strong> MAISONNAVE NATHAN, LAMAISON ENZO.</p>
+  <p><strong>Co-auteurs :</strong> Maisonnave Nathan, Lamaison Enzo, M1 IREF.</p>
 </div>  
-<!-- Projet 3 -->
+<!-- Projet 4 -->
 <div style="margin-bottom: 50px; border-left: 4px solid #003366; padding-left: 20px;">
   <h2 style="color:#003366;"> Analyse des Pokémon de Kanto – Projet JupyterLab</h2>
   <p><strong>Sujet :</strong> Réaliser une étude complète à l’aide des bibliothèques de data science dans JupyterLab (pandas, numpy, matplotlib, seaborn) en constituant une base de données originale.</p>
@@ -133,7 +154,7 @@
   <p><strong>Co-auteur :</strong> Faidy Robin, M1 IREF</p>
 </div>
 
-<!-- Projet 4 -->
+<!-- Projet 5 -->
 <div style="margin-bottom: 50px; border-left: 4px solid #003366; padding-left: 20px;">
   <h2 style="color:#003366;"> Revue de Littérature – Prévention de la Santé au Travail</h2>
   <p><strong>Sujet :</strong> Réalisation d’un TER universitaire en L3 sur les obligations juridiques et les pratiques organisationnelles en matière de santé au travail.</p>
