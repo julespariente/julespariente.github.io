@@ -1,0 +1,439 @@
+---
+title: "Projet_RIG"
+output: html_document
+date: "2025-11-15"
+---
+```{r}
+install.packages("CADFtest")
+library(CADFtest)
+library(xts)
+library(forecast) 
+library(moments)
+library(yfR)
+library(scales)
+library(FinTS)
+install.packages("aTSA")
+library(aTSA)
+```
+```{r}
+install.packages("future")
+```
+
+```{r}
+# RIG - Forage Offshore
+my_ticker <- 'RIG'
+first_date <- "2015-01-04"
+last_date <-"2025-11-12"
+
+# fetch data
+df_yf <- yf_get(tickers = my_ticker, 
+                first_date = first_date,
+                last_date = last_date,
+                freq_data='daily',type_return='log')
+
+pt<-df_yf$price_adjusted
+
+dpt=diff(pt)
+datesp<-df_yf$ref_date
+dates<-datesp[-1]
+rt=df_yf$ret_adjusted_prices[-1]
+N<-length(rt)
+rte<-rt[1:1761] 
+T<-length(rte)
+rtt<-rt[1762:N]
+
+op<-par(mfrow=c(3,1))
+plot(datesp,pt,type='l',ylab="indice RIG",col=3)
+plot(dates,dpt,type='l',col=2,ylab="variations de RIG")
+plot(dates,rt,type='l',col=1)
+
+
+```
+
+On observe sur la figure 1 que la série de RIG présente une tendance décroissante modérée. L'amplitude des fluctuations diminue nettement, ce qui est visible sur l'échelle de l'axe Y (0-20+). Un forte chute de l'indice est observé entre 2017 et 2019, d'une baisse d'environ 8 points.
+
+En analysant la 2e figure, on remarque que les variations de RIG n'ont pas de tendance discernable et fluctue autour de 0 (moyenne ≈ 0). L'amplitude des fluctuations diminue fortement au cours du temps. Des paquets de volatilité élevés sont présents de 2015 à 2018, avec plusieurs pics dépassant le seuil de ±1,0.
+
+Sur le Graphique 3, on observe l'évolution des rendements logarithmiques de RIG. Celles-ci ne présentent aucune tendance et oscille autour de 0 (médiane ≈ 0). L'amplitude est globalement très faible et stable, mais marquée par un pic exceptionnel en 2020, ou l'on observe un paquet de volatilité unique dont les valeurs atteignent des pics extrêmes de +0,4 et -0,4.
+
+
+```{r}
+length(rte) + length(rtt)
+```
+
+```{r}
+rbar<-mean(rte) #moyenne empirique
+rbar
+s=sd(rte)#écart type estimé
+s
+
+```
+la moyenne empirique calculée de l'action RIG est très proche de 0. On cherche à savoir si l'espérance du processus qui a généré rte est statistiquement nulle. On teste H0 : E(rte) = 0 VS E(rte) 
+
+```{r}
+rbar/(s/sqrt(T))#calcul de la statistique à la main
+T
+```
+Puisque T > 200, la valeur tabulée de comparaison est 1.96. On a |-0.8363721| < 1.96 don on accepte H0 : l'espérance du PGD qui a généré rte(t) est nulle.
+
+#------------------------- Stationnarité de rte (RIG) : Propriété 8 Stationnarité
+
+```{r}
+library(urca)
+#Trend
+summary(ur.df(rte,type= "trend",lags=0))
+
+```
+On accepte l'hypothèse nulle de non significativité de la tendance $\beta_1$ car p-value = 0.931 > 0.05. On passe à type = "drift".
+
+
+```{r}
+# Drift
+summary(ur.df(rte,type= "drift",lags=0))
+```
+On accepte l'hypothèse nulle de son significativité de la constante $\beta_0$ car p-value = 0.426 > 0.05. On passe à type = "none".
+
+
+```{r}
+#Drift
+summary(ur.df(rte,type= "none",lags=0))
+```
+Comme la statistique de test tau = -40.4284 < -1.95, on accepte l'hypothèse nulle de stationnarité.
+On cherche désormais à tester la présence d'autocorrélation dans le modèle de Dickey-Fuller.
+
+
+```{r}
+plot(ur.df(rte,lags= 0,type ="none"))
+acf(rte)
+```
+Le graphique des résidus de la série rte permet d'inspecter visuellement si le modèle a correctement capturé la structure des données, l'objectif étant d'obtenir des résidus qui fluctuent de manière aléatoire autour de zéro. Les résultats montrent une série qui oscille bien autour de la valeur centrale 0 sans tendance apparente, avec une amplitude qui semble relativement stable sur toute la période, bien que quelques pics plus importants soient visibles. On en déduit que le modèle ne présente pas de biais évident et que les résidus semblent raisonnablement homoscédastiques, justifiant l'analyse suivante qui est de vérifier formellement l'absence d'autocorrélation.
+
+On constate la présence d'autocorrélation dans les résidus. On augmente par conséquent le nombre maximum de lag du modèle ADF.
+
+Le graphique de l'autocorrélation partielle (PACF) des résidus vise à identifier une éventuelle structure autorégressive (AR) spécifique en mesurant la corrélation à un décalage donné, en contrôlant pour les décalages plus courts. Les résultats montrent que, tout comme pour l'ACF, tous les coefficients sont non significatifs et compris dans l'intervalle de confiance, l'axe des ordonnées confirmant leur faible amplitude. On interprète cela comme une confirmation que les résidus sont bien du bruit blanc d'un point de vue linéaire. L'étape suivante, logique pour une série financière, serait de tester la présence d'effets ARCH (d'hétéroscédasticité conditionnelle) sur ces résidus, par exemple avec un test de Ljung-Box sur les résidus au carré.
+
+```{r}
+ summary(ur.df(rte,lag=1, type="none" ))
+summary(ur.df(rte,lag=1,type="drift"))
+
+```
+
+```{r}
+Schwert<-as.integer(12*(T/100)^(0.25))
+summary(CADFtest(rte, criterion="MAIC",type="none",max.lag.y=Schwert)) 
+```
+Notre nombre de variables explicatives à ajouter est de 20. On réalise le test de Dickey-Fuller avec 20 variables explicatives 
+
+```{r}
+summary(ur.df(rte, type = "none", lags = Schwert))
+summary(ur.df(rte, type = "none", lags = 0))
+```
+**Interprétation**
+
+Pour k entre 1 et Schwert, on ne trouve pas de valeurs de k pour laquelle tous les gamma ont une statistique calculée t supérieure à 1.6 en valeur absolue. On s'en remet donc aux résultats de notre précédent test de Dickey-Fuller : Comme la statistique de test tau = -40.43 < -1.95, on accepte l'hypothèse nulle de stationnarité.
+
+
+```{r}
+summary(ur.za(rte, model = "both", lag = Schwert))
+summary(ur.za(rte, model = "both", lag = Schwert-1))
+summary(ur.za(rte, model = "both", lag = Schwert-2))
+```
+Notre dernier Gamma est significatif (T-value = 2.417 > 1.6).
+Les coefficients delta1 et delta2 (respectivement du et dt) sont tous deux significatifs (p-val(du) = 1.73e-05, p-val(dt) = 0.000826). La statistique de test calculée vaut -8.6465<-5.57<-5.08. On rejette donc H0 : le PGD est stationnaire avec une date de rupture en 1467e position, soit le 29 octobre 2020.
+
+#---------- Propriété  1 : Asymétrie (Skewness)
+On veut tester la présence d'une asymétrie dans rte. On a : 
+*HO VS HA*
+Sous H0, la statistique de test suit une loi normale centrée réduite.
+
+```{r}
+agostino.test(rte)
+```
+Le coefficient de skweness n'est pas significatif (p-value = 0.2679 > 0.05), donc on accepte H0 : la skewness est statistiquement nulle, la distribution est symmétrique : il n'y a pas d'asymétrie statistiquement prouvée entre la probabilité des gains et celle des pertes.
+
+
+#----------- Propriété 2 : Queues de Distribution épaisses (kurtosis)
+
+On veut tester la présence d'une asymétrie dans rte
+
+```{r}
+anscombe.test(rte)
+```
+on observe p-value = 2.2e-16 < 0.05 donc on rejette l'hypothèse d'un kurtosis égal à 3, on conclut à une distribution leptokurtique des rendements logarithmiques car kurt = 17.273 >3. Cela signifie que la distribution des rendements possède des queues de distribution plus épaisses que la loi normale; indiquant une fréquence plus élevée d'événements extrêmes (forts gains et fortes pertes) qu'une distribution gaussienne.
+
+
+
+#----------- Propriété 3 : Autocorrélation des carrés des rendements fortes et faibles pour les rendements
+
+
+```{r}
+Acf(rte,main='ACF du rendement logarithmique')
+Acf(rte^2,main='ACF du rendement logarithmique au carré')
+```
+
+L'ACF sur les rendements logarithmiques nous indique la présence d'autocorrélation aux ordres 7, 20, 23, et 26, ordres auxquels les statistiques calculées sortent des bornes de l'intervalle de confiance. 
+
+
+L'ACF sur les rendements logarithmiques au carré nous indique la présence d'autocorrélation aux ordres 1, 2, 3, 4, 5, 7, 10, 11, 16, 17, 25, 26, 27, 28, 29, 31 et 32. 
+
+
+
+# Test de Ljung-Box :
+
+
+```{r}
+pvaluesrt =rep(0,20)
+pvaluesrt2 =rep(0,20)
+for (i in 1:26 ) {
+  pvaluesrt[i] = Box.test(rte,lag=i,type="Ljung-Box")$p.value
+  pvaluesrt2[i] = Box.test(rte^2,lag=i,type="Ljung-Box")$p.value
+}
+pvaluesrt2
+```
+Les p-values du test de LB pour les rendements au carré sont toutes nulles donc on conclut à la présence d’autocorrélation dans les rendements au carré.
+
+```{r}
+pvaluesrt
+```
+A l'ordre i = 26, la pvalue du test de LB est <0.05 donc on rejette l’hypothèse nulle d’abscence d’autocorrélation pour rtet
+
+```{r}
+install.packages("TSA")
+library(TSA)
+library(lmtest)
+eacf(rte)
+```
+On trouve p = 4 et q = 4.
+
+```{r}
+library(forecast)
+reg<-Arima(rte, order=c(4,0,4))
+coeftest(reg)
+
+```
+On pose d'entrée fixed = c(NA,NA,NA,NA,
+                           NA, NA, NA, NA, 
+                           0)
+                           
+Puis on enlève un à un les coefficients non significaifs ( par ordre décroisaant des p-value)
+
+```{r}
+library(forecast)
+reg<-Arima(rte, order=c(4,0,4), fixed = c(NA, NA , NA, NA, 
+                                         NA, NA, NA, NA, 
+                                         0))
+coeftest(reg)
+```
+
+Ce modèle  sert à modéliser l’autocorrélation détectée dans rte. Il y arrive si les coefficients sont significatifs et si ses aléas du modèle ont une espérance nulle et ne sont pas autocorrélés
+
+
+```{r}
+residu<-reg$res
+t.test(residu)
+```
+La p-value  0.4041 > 0.05 donc on ne rejette pas H0 donc l’espérance des aléas est nulle et on passe au test
+d’absence d’autocorrélation.
+ 
+```{r}
+library(tseries)
+residuv=(residu-mean(residu))/sd(residu)
+K<-20
+tmp<-rep(0,K)
+for(i in 1:K){
+tmp[i]<-Box.test(residuv,lag=i,type="Ljung-Box")$p.value
+}
+tmp
+```
+Toutes les p-value obtenues sont > 5%, donc on accepte l'hypothèse nulle de la nullité de l'autocorrélation des aléas de notre ARMA(4,0,4).
+
+
+#------- 4 : clusters de Volatilité 
+
+```{r}
+LM1<-ArchTest(as.numeric(rte),lag=1)
+LM1
+```
+Après réalisation de l'archtest, on remarque que p-avlue = 2.2e-16 < 5%. On rejette donc H0, présence d'hétéroscédasticité conditionnelle.
+
+
+
+
+#------------- 5 : Queues épaisses conditionnelles
+
+On estime un GARCH(1,1)
+```{r}
+volat<-garch(residuv,order=c(1,1))
+```
+
+
+
+La modélisation GARCH des résidus de notre modèle ARMA(4,5) ne converge pas. On va donc utiliser une autre manière de procéder : 
+
+
+```{r}
+install.packages("fGarch")
+library(fGarch)
+volat<-garchFit(~garch(1,1),data=residuv,trace=F,include.mean = FALSE)
+summary(volat)
+resvolat=volat@residuals/volat@sigma.t   # this is the (standardized) GARCH residuals
+ArchTest(resvolat, lag = 1)
+```
+```{r}
+pacf(residuv^2)#order=8
+volat<-garch(residuv,order=c(0,8))#(n,m)
+summary(volat)#on vérifie que les coeff sont significatifs
+
+ArchTest(volat$res,lag=1)#on vérifie qu"il n'y a pas de clusters de volatilité dans les aléas du ARCH(8) à l'ordre 1
+ArchTest(volat$res,lag=20)#puis à l'ordre 20 et c'est le cas donc on valide le ARCH(8)
+```
+
+
+Les p-value des ArchTest réalisés sont inférieures à 0.05, ce qui témoigne de la présence d'hétéroscédasticité conditionnelle dans les résidus. On estime donc un modèle GARCH(1,0) (ou ARCH(1)).
+Puisque l'on travaille sur une action (titre financier), on choisit la loi de Student pour la modélisation de queues car elle reconnaît que le risque extrême est plus fréquent que ne le prédit la Loi Normale, ce que ns données confirment (queues épaisses).
+
+```{r}
+#install.packages("fGarch")
+#library(fGarch)
+
+spec_arch1_robuste = garchSpec(
+  model = list(omega = 0.05, alpha = c(0.1), beta = c(0)), 
+  cond.dist = "std" 
+)
+
+fit_arch1_robuste = garchFit(
+  formula = ~ garch(3, 0), # ARCH(1)
+  data = residuv, 
+  cond.dist = "std",       
+  trace = FALSE
+)
+summary(fit_arch1_robuste)
+```
+
+
+```{r}
+residus_standardises_final <- residuals(fit_arch1_robuste, standardize = TRUE)
+ArchTest(residus_standardises_final, lag = 1)
+```
+Le modèle ARCH(3) ou GARCH(3,0) prend donc bien en compte l'hétéroscédasticié conditionnelle présente dans nos données.
+
+
+```{r}
+ anscombe.test(residus_standardises_final)
+
+```
+Les queues de distribution de notre modèle sont donc bien plus épaisses que celles d'une loi normale.
+
+#---------------------- 6 : Effet de levier
+
+```{r}
+# Utilisation de la longueur de la série d'estimation
+T_rte <- length(rte)
+sig <- rep(NA, T_rte) # Initialisation avec NA
+
+# 1. Boucle pour calculer la volatilité historique (Fenêtre glissante de 22 jours)
+# Démarre à t=23 (pour utiliser les 22 jours précédents, de t-22 à t-1)
+for (t in 23:T_rte) {
+  
+  # Définition de la fenêtre: du jour t-22 au jour t-1
+  fenetre_22j <- rte[(t - 22):(t - 1)]
+  
+  # Calcul de l'écart-type (volatilité) sur cette fenêtre
+  sig[t] <- sd(fenetre_22j)
+}
+
+# 2. Préparation pour le graphique
+# On extrait les valeurs valides (à partir du jour 23) et on met en pourcentage (x 100)
+sigma <- sig[23:T_rte] * 100
+
+# 3. Tracé du graphique (comme dans l'original)
+op <- par(new = FALSE) # Réinitialiser le graphique
+plot(
+  log(pt[23:T_rte]),
+  type = 'l',
+  col = "indianred", # Couleur du prix
+  axes = FALSE,
+  xlab = "",
+  ylab = "log(pt)",
+  lwd = 3
+)
+axis(2) # Axe Y de gauche pour log(pt)
+axis(1) # Axe X (Temps)
+
+par(new = TRUE) # Superposer le graphique
+
+plot(
+  sigma,
+  col = "grey", # Couleur de la volatilité
+  type = 'l',
+  axes = FALSE,
+  xlab = "",
+  ylab = ""
+)
+
+axis(4, col.axis = "grey") # Axe Y de droite pour sigma
+mtext("sigma (%)", side = 4, line = 3, col = "grey")
+
+legend("topleft", c("log(pt)", "sigma"), col = c("indianred", "grey"), lty = c(1, 1))
+
+par(op) # Restauration des paramètres graphiques
+```
+
+
+#------------- 7 : La saisonnalité
+
+
+```{r}
+# --- 1. Préparation de la structure et des données ---
+# Assurez-vous que les packages 'moments' et 'scales' sont chargés.
+
+# Extraire le jour de la semaine à partir de la série de dates d'estimation
+# T est la longueur de rte. On utilise dates[1:T] pour rester sur l'échantillon d'estimation.
+jour <- format(dates[1:T], format = "%A")
+
+# Création du tableau de résultats vide
+tableaures <- data.frame(matrix(NA, ncol = 5, nrow = 4))
+colnames(tableaures) <- c("lundi", "mardi", "mercredi", "jeudi", "vendredi")
+rownames(tableaures) <- c("moyenne en %", "ecart-type annuel en %", "skewness", "kurtosis")
+
+# --- 2. Fonction pour calculer et remplir les statistiques ---
+# Cette fonction simplifie l'itération pour chaque jour
+calcul_stats <- function(jour_semaine, colonne) {
+  # Filtre les rendements pour le jour spécifique
+  rt_jour <- as.numeric(rte[jour == jour_semaine])
+  
+  # Calcule les 4 statistiques
+  moyenne <- mean(rt_jour)
+  ecart_type_annuel <- sd(rt_jour) * 100 * sqrt(252) # Annualisation (252 jours de trading)
+  skew <- skewness(rt_jour)
+  kurt <- kurtosis(rt_jour)
+  
+  # Rempli le tableau
+  tableaures[1, colonne] <<- moyenne * 100
+  tableaures[2, colonne] <<- ecart_type_annuel
+  tableaures[3, colonne] <<- skew
+  tableaures[4, colonne] <<- kurt
+}
+
+# --- 3. Exécution pour chaque jour ---
+# Note: La fonction est appelée avec le nom complet du jour en français (selon votre système)
+
+calcul_stats("lundi", 1)
+calcul_stats("mardi", 2)
+calcul_stats("mercredi", 3)
+calcul_stats("jeudi", 4)
+calcul_stats("vendredi", 5)
+
+# --- 4. Affichage du résultat ---
+tableaures
+```
+
+L'analyse de la série de rendements $\text{rte}$ réalisée confirme les propriétés stylisées des actifs financiers. La série est stationnaire ($\text{I}(0)$) et son espérance est statistiquement nulle. Bien que la distribution soit symétrique (Skewness non significative), elle est massivement leptokurtique (queues épaisses). La dépendance linéaire est faible (modélisée par $\text{ARMA}(4, 4)$), mais l'autocorrélation au carré est forte, confirmant les clusters de volatilité (Propriété 4) nécessitant un modèle de variance. Le modèle optimal trouvé est un $\text{ARCH}(10)$ avec des erreurs distribuées selon la Loi de Student pour capturer le $\text{kurtosis}$ résiduel (Propriété 5). Enfin, un Effet Week-end est observé, avec le Lundi comme jour le plus volatil et performant, tandis que le Jeudi est le moins volatil.
+
+
+
+```{r}
+monthplot(rte, ylab="rendement",main="", cex.main=1,col.base=2,lwd.base=3)
+```
+
+Le graphique des rendements logarithmiques par mois confirme une absence de tendance saisonnière claire sur la performance moyenne, cette dernière restant proche de zéro pour la majorité de l'année, ce qui affaiblit l'hypothèse de l'"Effet Janvier". Néanmoins, la distribution du risque est hétérogène, avec une forte volatilité concentrée sur certains mois. On observe notamment un choc négatif exceptionnel durant le mois de Juin (6), soulignant que la survenance d'événements extrêmes (propres à la Propriété 2) est répartie de manière inégale sur le calendrier. Le graphique démontre une gestion du risque mensuel doit se concentrer sur l'amplitude des chocs plutôt que sur la moyenne.
