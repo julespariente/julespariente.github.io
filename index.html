@@ -86,20 +86,21 @@
   <h2 style="color:#003366;"> Analyse Économétrique des Rendements de l'Action RIG – Projet R/RStudio</h2>
   <p><strong>Sujet :</strong> Réaliser l'analyse économétrique des rendements logarithmiques d'un actif financier et en déduire un modèle de Volatilité (GARCH) optimal pour la Modélisation du Risque (VaR).</p>
   <p><strong>Description :</strong> 
-    Ce projet s'est concentré sur l'étude des <strong>huit propriétés des rendements des actifs financiers</strong> appliquées à l'action <strong>RIG</strong> (Forage Offshore), sur une base de données de 2730 observations (2015-2025). L'analyse a confirmé que la série était <strong>stationnaire</strong> mais présentait une <strong>leptokurticité massive</strong> (queues épaisses) et de forts <strong>clusters de volatilité</strong> (autocorrélation au carré). Ces résultats ont justifié l'utilisation de modèles <strong>GARCH</strong> avec une <strong>Loi de Student</strong> pour les erreurs et ont confirmé l'existence d'un <strong>Effet de Levier</strong> asymétrique.
+    Ce projet s'est concentré sur l'étude des <strong>huit propriétés des rendements des actifs financiers</strong> appliquées à l'action <strong>RIG</strong> (Forage Offshore), sur une base de données de 2730 observations (2015-2025). L'analyse a confirmé que la série était <strong>stationnaire</strong> mais présentait une <strong>leptokurticité massive</strong> (queues épaisses) et de forts <strong>clusters de volatilité</strong>. Ces résultats ont justifié l'utilisation d'un modèle <strong>EGARCH</strong> avec une <strong>Distribution GHYP</strong> pour les erreurs, confirmant ainsi l'existence d'un <strong>Effet de Levier</strong> asymétrique.
   </p>
   <p><strong>Étapes principales :</strong><br>
     - <strong>Vérification des Propriétés :</strong> Analyse des 8 propriétés statistiques (stationnarité, skewness, kurtosis, saisonnalité, etc.). <br>
     - <strong>Modélisation Linéaire :</strong> Identification et estimation d'un modèle <strong>ARMA</strong> pour capturer la faible dépendance linéaire des rendements.<br>
-    - <strong>Modélisation de Volatilité :</strong> Identification et estimation d'un modèle <strong>ARCH(10)</strong> (ou GARCH asymétrique) pour capturer les clusters de volatilité et l'effet de levier.<br>
-    - <strong>Distribution des Chocs :</strong> Utilisation de la <strong>Loi de Student</strong> pour les erreurs afin de modéliser le kurtosis résiduel et les queues épaisses.<br>
-    - <strong>Analyse de Saisonnalité :</strong> Étude des statistiques par jour de la semaine et par mois, révélant une <strong>Saisonnalité Journalière Forte</strong> (Lundi le plus volatil et performant).
+    - <strong>Modélisation de Volatilité :</strong> Sélection d'un modèle <strong>EGARCH(1,1)</strong> pour capturer les clusters de volatilité et l'effet de levier.<br>
+    - <strong>Distribution des Chocs :</strong> Utilisation de la <strong>Distribution GHYP</strong> (Généralisée Hyperbolique) pour modéliser le kurtosis résiduel et les queues épaisses.<br>
+    - <strong>Analyse de Saisonnalité :</strong> Étude des statistiques par jour de la semaine et par mois, révélant une <strong>Saisonnalité Journalière Forte</strong> (Lundi le plus volatil).<br>
+    - <strong>Backtesting & VaR :</strong> Estimation de la Value-at-Risk et validation par les tests de couverture (Kupiec) et d'indépendance (Christoffersen).
   </p>
   <p><strong>Fichiers du projet :</strong><br>
-    - <a href="assets/RIG_Pariente.pdf" target="_blank">Rapport d'Analyse (PDF)</a><br>
-    - <a href="assets/Annexe.pdf" target="_blank">Annexe et Synthèse des Tests (PDF)</a><br>
-    - <a href="assets/RTE_RIG.Rmd" target="_blank">Code R - Échantillon d'Estimation (RMarkdown)</a><br>
-    - <a href="assets/RTT_RIG.Rmd" target="_blank">Code R - Échantillon de Test et Saisonnalité (RMarkdown)</a>
+    - <a href="assets/Rapport_Complet_Analyse_Risque_RIG.pdf" target="_blank">Rapport Complet & Annexes (PDF)</a><br>
+    - <a href="assets/RTE_RIG.Rmd" target="_blank">Code R - Analyse Échantillon d'Estimation (RMarkdown)</a><br>
+    - <a href="assets/RTT_RIG.Rmd" target="_blank">Code R - Analyse Échantillon de Test (RMarkdown)</a><br>
+    - <a href="assets/Code_Projet_Propre.R" target="_blank">Code R - Modélisation GARCH & Backtesting (Script R)</a>
   </p>
 </div>
 <!-- Projet 3 -->
