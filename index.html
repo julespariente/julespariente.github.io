@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,6 +35,14 @@
       font-size: 16px;
       margin: 5px 0 0 0;
     }
+    .header-links h4 {
+      margin: 15px 0 0 0;
+    }
+    .separator-line {
+      margin: 8px auto;
+      max-width: 150px;
+      color: #1e1e1e;
+    }
     hr {
       border: none;
       height: 1px;
@@ -59,37 +67,44 @@
       margin-top: 0;
     }
 
-    /* Style du sélecteur de langue fixe */
+    /* Conteneur des drapeaux cliquables */
     .lang-container {
       position: fixed;
       top: 20px;
       right: 20px;
       z-index: 1000;
       background: rgba(255, 255, 255, 0.9);
-      padding: 5px 10px;
+      padding: 5px 8px;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 10px;
     }
-    .lang-container select {
-      font-family: 'Georgia', serif;
-      padding: 5px;
-      border: 1px solid #003366;
-      background-color: #fff;
-      color: #003366;
+    .flag-btn {
+      width: 30px;
+      height: 20px;
       cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      transition: transform 0.2s, border-color 0.2s;
+      border-radius: 2px;
     }
-    .lang-container select:focus {
-      outline: none;
+    .flag-btn:hover {
+      transform: scale(1.1);
+    }
+    .flag-btn.active {
+      border: 2px solid #003366;
     }
     
-    /* Ajustement responsive pour mobile */
+    /* Ajustement mobile */
     @media (max-width: 600px) {
       .lang-container {
         position: static;
-        text-align: right;
+        justify-content: flex-end;
         margin-bottom: 20px;
+        box-shadow: none;
+        background: transparent;
+        padding: 0;
       }
       body {
         padding: 15px;
@@ -99,103 +114,102 @@
 </head>
 <body>
 
-<!-- Sélecteur de langue de confiance -->
+<!-- Sélecteur de langue avec vos images -->
 <div class="lang-container">
-  <select id="lang-switcher">
-    <option value="fr">Français</option>
-    <option value="en">English</option>
-  </select>
+  <img src="assets/IMG_1004.jpg" alt="English" class="flag-btn" id="btn-en" onclick="changeLanguage('en')">
+  <img src="assets/IMG_1005.jpg" alt="Français" class="flag-btn" id="btn-fr" onclick="changeLanguage('fr')">
 </div>
 
 <header>
   <h1 id="author-name">Jules Pariente</h1>
-  <h2 id="author-title">Étudiant M2 IREF – Université de Bordeaux</h2>
-  <h3 id="author-keywords">Analyse de risques, Modélisation, Statistiques, Scoring, Value at Risk</h3>
-  <h4>
-    <a id="link-cv" href="assets/Resume_Pariente.pdf" target="_blank">Curriculum Vitae</a>
-    <span> ——————— </span>
-    <a href="https://www.linkedin.com/in/jules-pariente" target="_blank">LinkedIn</a>
-  </h4>
+  <h2 id="author-title">M2 IREF Student – University of Bordeaux</h2>
+  <h3 id="author-keywords">Risk Analysis, Modeling, Statistics, Scoring, Value at Risk</h3>
+  
+  <div class="header-links">
+    <h4><a id="link-cv" href="assets/Resume_Pariente.pdf" target="_blank">Curriculum Vitae (FR)</a></h4>
+    <div class="separator-line">-----------------------</div>
+    <h4><a href="https://www.linkedin.com/in/jules-pariente" target="_blank">LinkedIn</a></h4>
+  </div>
+  
   <hr>
 </header>
 
 <!-- Projet 1 -->
 <div class="project-card">
-  <h2 id="p1-title">Invalid Drug Promotion in COVID-19 / Projet Rstudio</h2>
-  <p><strong id="p1-label-subject">Sujet :</strong> <span id="p1-subject">Évaluation de l’impact économique de la promotion non fondée de l’hydroxychloroquine pendant la pandémie.</span></p>
-  <p><strong id="p1-label-desc">Description :</strong> <span id="p1-desc">Pendant la crise du COVID-19, certains médicaments comme l’hydroxychloroquine et l’azithromycine ont fait l’objet de communications erronées et non fondées. Ce projet évalue le surcoût induit par cette mésinformation en analysant les remboursements de l’Assurance Maladie pour ces traitements. Une analyse en séries temporelles interrompues a été réalisée (modèles ARIMA avec intervention) sur la période de janvier 2015 à mars 2022.</span> <a id="p1-link-code" href="assets/Series_Medicaments.R" target="_blank">Voir le code R</a></p>
-  <p><strong id="p1-label-method">Méthodologie :</strong><br>
-    <span id="p1-method">- Données chronologiques (base de données DRUGS-SAFEr)<br>- ARIMA avec variable d’intervention (février/mars 2020)<br>- Comparaison avant/après et estimation des coûts excédentaires<br>- Contrôle négatif avec les anti-TNF</span>
+  <h2 id="p1-title">Invalid Drug Promotion in COVID-19 / RStudio Project</h2>
+  <p><strong id="p1-label-subject">Subject:</strong> <span id="p1-subject">Evaluating the economic impact of unfounded promotion of hydroxychloroquine during the pandemic.</span></p>
+  <p><strong id="p1-label-desc">Description:</strong> <span id="p1-desc">During the COVID-19 crisis, certain drugs like hydroxychloroquine and azithromycin were subject to misleading and unfounded communication. This project assesses the excess costs generated by this misinformation by analyzing French National Health Insurance (Assurance Maladie) reimbursements for these treatments. An interrupted time series analysis was conducted (ARIMA models with intervention) over the period from January 2015 to March 2022.</span> <a id="p1-link-code" href="assets/Series_Medicaments.R" target="_blank">View R Code</a></p>
+  <p><strong id="p1-label-method">Methodology:</strong><br>
+    <span id="p1-method">- Time series data (DRUGS-SAFEr database)<br>- ARIMA with intervention variable (February/March 2020)<br>- Before/after comparison and estimation of excess costs<br>- Negative control using anti-TNF drugs</span>
   </p>
-  <p><strong id="p1-label-result">Résultat :</strong> <span id="p1-result">Un excès de remboursement supérieur à 1 million d’euros a été estimé, soit environ 12 % au-dessus de l’attendu. Aucun effet similaire observé pour les traitements de contrôle.</span></p>
-  <p><strong id="p1-label-submit">Soumission :</strong> <span id="p1-submit">Projet soumis au congrès SFPT 2025 (abstract n°00161).</span> <a id="p1-link-abstract" href="assets/Abstract_00161.pdf" target="_blank">Lire l’abstract</a></p>
+  <p><strong id="p1-label-result">Result:</strong> <span id="p1-result">An excess reimbursement of over 1 million euros was estimated, representing approximately 12% above expected levels. No similar effect was observed for the control treatments.</span></p>
+  <p><strong id="p1-label-submit">Submission:</strong> <span id="p1-submit">Project submitted to the SFPT 2025 congress (abstract No. 00161).</span> <a id="p1-link-abstract" href="assets/Abstract_00161.pdf" target="_blank">Read the abstract</a></p>
 </div>
 
 <!-- Projet 2 -->
 <div class="project-card">
-  <h2 id="p2-title">Analyse Économétrique des Rendements de l'Action RIG – Projet R/RStudio</h2>
-  <p><strong id="p2-label-subject">Sujet :</strong> <span id="p2-subject">Réaliser l'analyse économétrique des rendements logarithmiques d'un actif financier et en déduire un modèle de Volatilité (GARCH) optimal pour la Modélisation du Risque (VaR).</span></p>
-  <p><strong id="p2-label-desc">Description :</strong> <span id="p2-desc">Ce projet s'est concentré sur l'étude des <strong>huit propriétés des rendements des actifs financiers</strong> appliquées à l'action <strong>RIG</strong> (Forage Offshore), sur une base de données de 2730 observations (2015-2025). L'analyse a confirmé que la série était <strong>stationnaire</strong> mais présentait une <strong>leptokurticité massive</strong> (queues épaisses) et de forts <strong>clusters de volatilité</strong>. Ces résultats ont justifié l'utilisation d'un modèle <strong>EGARCH</strong> avec une <strong>Distribution GHYP</strong> pour les erreurs, confirmant ainsi l'existence d'un <strong>Effet de Levier</strong> asymétrique.</span></p>
-  <p><strong id="p2-label-steps">Étapes principales :</strong><br>
-    <span id="p2-steps">- <strong>Vérification des Propriétés :</strong> Analyse des 8 propriétés statistiques (stationnarité, skewness, kurtosis, saisonnalité, etc.).<br>- <strong>Modélisation Linéaire :</strong> Identification et estimation d'un modèle <strong>ARMA</strong> pour capturer la faible dépendance linéaire des rendements.<br>- <strong>Modélisation de Volatilité :</strong> Sélection d'un modèle <strong>EGARCH(1,1)</strong> pour capturer les clusters de volatilité et l'effet de levier.<br>- <strong>Distribution des Chocs :</strong> Utilisation de la <strong>Distribution GHYP</strong> (Généralisée Hyperbolique) pour modéliser le kurtosis résiduel et les queues épaisses.<br>- <strong>Analyse de Saisonnalité :</strong> Étude des statistiques par jour de la semaine et par mois, révélant une <strong>Saisonnalité Journalière Forte</strong> (Lundi le plus volatil).<br>- <strong>Backtesting & VaR :</strong> Estimation de la Value-at-Risk et validation par les tests de couverture (Kupiec) et d'indépendance (Christoffersen).</span>
+  <h2 id="p2-title">Econometric Analysis of RIG Stock Returns – R/RStudio Project</h2>
+  <p><strong id="p2-label-subject">Subject:</strong> <span id="p2-subject">Perform econometric analysis on the log returns of a financial asset and derive an optimal Volatility model (GARCH) for Risk Modeling (VaR).</span></p>
+  <p><strong id="p2-label-desc">Description:</strong> <span id="p2-desc">This project focused on studying the <strong>eight stylized facts of financial asset returns</strong> applied to <strong>RIG</strong> (Offshore Drilling) stock, using a database of 2,730 observations (2015-2025). The analysis confirmed that the series was <strong>stationary</strong> but exhibited <strong>massive leptokurtosis</strong> (heavy tails) and strong <strong>volatility clustering</strong>. These findings justified the use of an <strong>EGARCH</strong> model with a <strong>GHYP Distribution</strong> for errors, thereby confirming the existence of an asymmetric <strong>Leverage Effect</strong>.</span></p>
+  <p><strong id="p2-label-steps">Key Steps:</strong><br>
+    <span id="p2-steps">- <strong>Property Verification:</strong> Analysis of the 8 statistical facts (stationarity, skewness, kurtosis, seasonality, etc.).<br>- <strong>Linear Modeling:</strong> Identification and estimation of an <strong>ARMA</strong> model to capture weak linear dependence in returns.<br>- <strong>Volatility Modeling:</strong> Selection of an <strong>EGARCH(1,1)</strong> model to capture volatility clustering and leverage effects.<br>- <strong>Shock Distribution:</strong> Utilizing the <strong>GHYP Distribution</strong> (Generalized Hyperbolic) to model residual kurtosis and heavy tails.<br>- <strong>Seasonality Analysis:</strong> Examination of statistics by day of the week and month, revealing <strong>Strong Daily Seasonality</strong> (Monday being the most volatile).<br>- <strong>Backtesting & VaR:</strong> Value-at-Risk estimation and validation through coverage (Kupiec) and independence (Christoffersen) tests.</span>
   </p>
-  <p><strong id="p2-label-files">Fichiers du projet :</strong><br>
-    - <a href="assets/Rapport_Complet_Analyse_Risque_RIG.pdf" target="_blank" id="p2-f1">Rapport Complet & Annexes (PDF)</a><br>
-    - <a href="assets/RTE_RIG.Rmd" target="_blank" id="p2-f2">Code R - Analyse Échantillon d'Estimation (RMarkdown)</a><br>
-    - <a href="assets/RTT_RIG.Rmd" target="_blank" id="p2-f3">Code R - Analyse Échantillon de Test (RMarkdown)</a><br>
-    - <a href="assets/Code_Projet_Propre.R" target="_blank" id="p2-f4">Code R - Modélisation GARCH & Backtesting (Script R)</a>
+  <p><strong id="p2-label-files">Project Files:</strong><br>
+    - <a href="assets/Rapport_Complet_Analyse_Risque_RIG.pdf" target="_blank" id="p2-f1">Full Report & Appendices (PDF)</a><br>
+    - <a href="assets/RTE_RIG.Rmd" target="_blank" id="p2-f2">R Code - Estimation Sample Analysis (RMarkdown)</a><br>
+    - <a href="assets/RTT_RIG.Rmd" target="_blank" id="p2-f3">R Code - Test Sample Analysis (RMarkdown)</a><br>
+    - <a href="assets/Code_Projet_Propre.R" target="_blank" id="p2-f4">R Code - GARCH Modeling & Backtesting (R Script)</a>
   </p>
 </div>
 
 <!-- Projet 3 -->
 <div class="project-card">
-  <h2 id="p3-title">Gestion d'un Mercato Footballistique – Projet VBA Excel</h2>
-  <p><strong id="p3-label-subject">Sujet :</strong> <span id="p3-subject">Simuler de manière réaliste les opérations de transfert de joueurs tout en respectant des contraintes budgétaires propres à chaque club de football professionnel.</span></p>
-  <p><strong id="p3-label-desc">Description :</strong> <span id="p3-desc">Ce projet est une application VBA développée dans Excel pour imiter un outil de gestion de mercato. L'objectif principal était de modéliser la mécanique complète des transferts et d'assurer un suivi financier rigoureux. L'application gère une base de données de joueurs , permet la saisie d'offres de transfert, et ajuste automatiquement les budgets des clubs acheteurs et vendeurs de manière fidèle aux logiques financières réelles du football.</span></p>
-  <p><strong id="p3-label-steps">Étapes principales :</strong><br>
-    <span id="p3-steps">- Base de Données Joueurs : Construction d'une base de données centralisant le nom, poste, âge, club, valeur marchande et statut (à vendre, ciblé, etc.). Alimentation par importation Excel ou UserForm.<br>- Gestion des Transferts : Développement d'un UserForm ("Faire une offre") pour enregistrer les transactions. L'opération met à jour l'affiliation du joueur et impacte les budgets.<br>- Règles de Réalisme : Intégration d'une contrainte empêchant les offres inférieures à 90% de la valeur marchande du joueur.<br>- Suivi Budgétaire : Création d'une feuille "Budgets clubs" avec budget initial, calcul automatique des ventes/achats/salaires, et alerte visuelle (couleur rouge) si le budget devient négatif.<br>- Historique et Recherche : Mise en place d'un système d'historique des transferts et d'un outil de recherche multicritère de joueurs via UserForms.</span>
+  <h2 id="p3-title">Football Transfer Window Management – Excel VBA Project</h2>
+  <p><strong id="p3-label-subject">Subject:</strong> <span id="p3-subject">Realistically simulate player transfer operations while respecting specific budget constraints for each professional football club.</span></p>
+  <p><strong id="p3-label-desc">Description:</strong> <span id="p3-desc">This project is a VBA application developed in Excel to mimic a transfer window management tool. The main objective was to model the complete mechanics of transfers and ensure rigorous financial tracking. The application manages a player database, allows entry of transfer offers, and automatically adjusts the budgets of buying and selling clubs in a way that faithfully aligns with real-world football financial logic.</span></p>
+  <p><strong id="p3-label-steps">Key Steps:</strong><br>
+    <span id="p3-steps">- Player Database: Built a database centralizing name, position, age, club, market value, and status (for sale, targeted, etc.). Populated via Excel import or UserForm.<br>- Transfer Management: Developed a "Make an Offer" UserForm to record transactions. The operation updates player affiliation and impacts budgets.<br>- Realism Rules: Integrated a constraint preventing offers lower than 90% of the player's market value.<br>- Budget Tracking: Created a "Club Budgets" sheet with initial budget, automatic calculation of sales/purchases/salaires, and a visual alert (red color) if the budget becomes negative.<br>- History & Search: Set up a transfer history system and a multi-criteria player search tool via UserForms.</span>
   </p>
-  <p><strong id="p3-label-visu">Visualisation (UserForms clés) :</strong><br>
-    <span id="p3-visu">- Saisie de Joueur<br>- Faire une Offre<br>- Recherche de Joueurs<br>- Suivi Budget</span>
+  <p><strong id="p3-label-visu">Visualization (Key UserForms):</strong><br>
+    <span id="p3-visu">- Player Entry<br>- Make an Offer<br>- Player Search<br>- Budget Tracking</span>
   </p>
-  <p><strong id="p3-label-files">Fichiers du projet :</strong><br>
-    - <a href="assets/ProjetVBAMercato.xlsm" target="_blank" id="p3-f1">Télécharger le fichier Excel</a><br>
-    - <a href="assets/ProjetVBAMercato.pdf" target="_blank" id="p3-f2">Télécharger le pdf</a>
+  <p><strong id="p3-label-files">Project Files:</strong><br>
+    - <a href="assets/ProjetVBAMercato.xlsm" target="_blank" id="p3-f1">Download Excel File</a><br>
+    - <a href="assets/ProjetVBAMercato.pdf" target="_blank" id="p3-f2">Download PDF</a>
   </p>
-  <p><strong id="p3-label-authors">Co-auteurs :</strong> Maisonnave Nathan, Lamaison Enzo, M1 IREF.</p>
+  <p><strong id="p3-label-authors">Co-authors:</strong> Maisonnave Nathan, Lamaison Enzo, M1 IREF.</p>
 </div>
 
 <!-- Projet 4 -->
 <div class="project-card">
-  <h2 id="p4-title">Analyse des Pokémon de Kanto – Projet JupyterLab</h2>
-  <p><strong id="p4-label-subject">Sujet :</strong> <span id="p4-subject">Réaliser une étude complète à l’aide des bibliothèques de data science dans JupyterLab (pandas, numpy, matplotlib, seaborn) en constituant une base de données originale.</span></p>
-  <p><strong id="p4-label-desc">Description :</strong> <span id="p4-desc">Ce projet explore les caractéristiques statistiques des Pokémon de la région Kanto. Nous avons réalisé un <strong>webscraping</strong> depuis Poképédia pour collecter les données de base (noms, types, statistiques) et constitué un <strong>DataFrame nettoyé</strong> structuré pour l’analyse. L’étude inclut des comparaisons visuelles, des classements multicritères, et des représentations graphiques détaillées. La note obtenue pour ce projet est de <strong>17/20</strong>.</span></p>
-  <p><strong id="p4-label-steps">Étapes principales :</strong><br>
-    <span id="p4-steps">- Récupération des données via BeautifulSoup (webscraping)<br>- Nettoyage et enrichissement des données avec pandas<br>- Visualisation statistique avec matplotlib et seaborn<br>- Classements par puissance, type, et équilibre</span>
+  <h2 id="p4-title">Kanto Pokémon Analysis – JupyterLab Project</h2>
+  <p><strong id="p4-label-subject">Subject:</strong> <span id="p4-subject">Conduct a comprehensive study using data science libraries in JupyterLab (pandas, numpy, matplotlib, seaborn) by building an original database.</span></p>
+  <p><strong id="p4-label-desc">Description:</strong> <span id="p4-desc">This project explores the statistical characteristics of Pokémon from the Kanto region. We performed <strong>webscraping</strong> from Poképédia to collect baseline data (names, types, statistics) and built a structured, <strong>cleaned DataFrame</strong> for analysis. The study includes visual comparisons, multi-criteria rankings, and detailed graphical representations. The grade achieved for this project was <strong>17/20</strong>.</span></p>
+  <p><strong id="p4-label-steps">Key Steps:</strong><br>
+    <span id="p4-steps">- Data retrieval via BeautifulSoup (webscraping)<br>- Data cleaning and enrichment using pandas<br>- Statistical visualization with matplotlib and seaborn<br>- Rankings by power, type, and balance</span>
   </p>
-  <p><strong id="p4-label-visu">Visualisation :</strong> <span id="p4-visu">Une carte haute définition de la région de Kanto a été intégrée pour contextualiser visuellement les résultats.</span> <a id="p4-link-map" href="assets/kanto_map.png" target="_blank">Voir la carte</a></p>
-  <p><strong id="p4-label-files">Fichiers du projet :</strong> <a id="p4-link-notebook" href="assets/Projet_OUTINFO.ipynb" target="_blank">Télécharger le notebook</a></p>
-  <p><strong id="p4-label-authors">Co-auteur :</strong> Faidy Robin, M1 IREF</p>
+  <p><strong id="p4-label-visu">Visualization:</strong> <span id="p4-visu">A high-definition map of the Kanto region was integrated to visually contextualize the results.</span> <a id="p4-link-map" href="assets/kanto_map.png" target="_blank">View the map</a></p>
+  <p><strong id="p4-label-files">Project Files:</strong> <a id="p4-link-notebook" href="assets/Projet_OUTINFO.ipynb" target="_blank">Download the notebook</a></p>
+  <p><strong id="p4-label-authors">Co-authors:</strong> Faidy Robin, M1 IREF</p>
 </div>
 
 <!-- Projet 5 -->
 <div class="project-card">
-  <h2 id="p5-title">Revue de Littérature – Prévention de la Santé au Travail</h2>
-  <p><strong id="p5-label-subject">Sujet :</strong> <span id="p5-subject">Réalisation d’un TER universitaire en L3 sur les obligations juridiques et les pratiques organisationnelles en matière de santé au travail.</span></p>
-  <p><strong id="p5-label-desc">Description :</strong> <span id="p5-desc">Ce travail mené en collaboration avec deux collègues consistait à produire une <strong>revue de littérature exhaustive</strong> sur la prévention de la santé au travail. L’étude retrace l’évolution historique et juridique de la prévention, explore les liens avec la <em>Responsabilité Sociétale des Entreprises (RSE)</em>, et analyse en détail l’outil réglementaire central qu’est le <strong>Document Unique d’Évaluation des Risques Professionnels (DUERP)</strong>.</span></p>
-  <p><strong id="p5-label-steps">Points forts :</strong><br>
-    <span id="p5-steps">- Analyse rigoureuse des textes de loi<br>- Mise en perspective historique et internationale (OIT, OMS, directives européennes)<br>- Approche multidisciplinaire : droit, gestion, santé publique<br>- Application concrète des concepts de prévention et de RSE</span>
+  <h2 id="p5-title">Literature Review – Occupational Health Prevention</h2>
+  <p><strong id="p5-label-subject">Subject:</strong> <span id="p5-subject">Completion of a third-year university research project (TER) on legal obligations and organizational practices regarding occupational health.</span></p>
+  <p><strong id="p5-label-desc">Description:</strong> <span id="p5-desc">This work, conducted in collaboration with two peers, involved producing a <strong>comprehensive literature review</strong> on occupational health prevention. The study traces the historical and legal evolution of prevention, explores links with <em>Corporate Social Responsibility (CSR)</em>, and deeply analyzes the central regulatory tool: the <strong>Single Occupational Risk Assessment Document (DUERP)</strong>.</span></p>
+  <p><strong id="p5-label-steps">Key Steps:</strong><br>
+    <span id="p5-steps">- Rigorous analysis of legal texts<br>- Historical and international perspective (ILO, WHO, European directives)<br>- Multidisciplinary approach: law, management, public health<br>- Practical application of prevention and CSR concepts</span>
   </p>
-  <p><strong id="p5-label-authors">Co-autrices :</strong><br>
+  <p><strong id="p5-label-authors">Co-authors:</strong><br>
     Vaty Mélody <br> 
     Zamozik Daphné
   </p>
-  <p><strong id="p5-label-files">Fichier du projet :</strong> <a id="p5-link-doc" href="assets/Revue_Litterature_Pariente_Vaty_Zamozik.docx" target="_blank">Télécharger la revue</a></p>
-  <p><em id="p5-footer">Réalisé sous la direction de Mme Gagnou, Université de Bordeaux, 2022</em></p>
+  <p><strong id="p5-label-files">Project Files:</strong> <a id="p5-link-doc" href="assets/Revue_Litterature_Pariente_Vaty_Zamozik.docx" target="_blank">Download the review</a></p>
+  <p><em id="p5-footer">Produced under the supervision of Mrs. Gagnou, University of Bordeaux, 2022</em></p>
 </div>
 
 <script>
-  // Dictionnaire de traductions FR / EN
   const translations = {
     fr: {
       authorTitle: "Étudiant M2 IREF – Université de Bordeaux",
@@ -239,7 +253,7 @@
       p3Visu: "- Saisie de Joueur<br>- Faire une Offre<br>- Recherche de Joueurs<br>- Suivi Budget",
       p3F1: "Télécharger le fichier Excel",
       p3F2: "Télécharger le pdf",
-      p3Authors: "Co-auteurs : Maisonnave Nathan, Lamaison Enzo, M1 IREF.",
+      p3Authors: "Maisonnave Nathan, Lamaison Enzo, M1 IREF.",
       
       p4Title: "Analyse des Pokémon de Kanto – Projet JupyterLab",
       p4Subject: "Réaliser une étude complète à l’aide des bibliothèques de data science dans JupyterLab (pandas, numpy, matplotlib, seaborn) en constituant une base de données originale.",
@@ -248,7 +262,7 @@
       p4VisuText: "Une carte haute définition de la région de Kanto a été intégrée pour contextualiser visuellement les résultats.",
       p4LinkMap: "Voir la carte",
       p4LinkNotebook: "Télécharger le notebook",
-      p4Authors: "Co-auteur : Faidy Robin, M1 IREF",
+      p4Authors: "Faidy Robin, M1 IREF",
       
       p5Title: "Revue de Littérature – Prévention de la Santé au Travail",
       p5Subject: "Réalisation d’un TER universitaire en L3 sur les obligations juridiques et les pratiques organisationnelles en matière de santé au travail.",
@@ -299,7 +313,7 @@
       p3Visu: "- Player Entry<br>- Make an Offer<br>- Player Search<br>- Budget Tracking",
       p3F1: "Download Excel File",
       p3F2: "Download PDF",
-      p3Authors: "Co-authors: Maisonnave Nathan, Lamaison Enzo, M1 IREF.",
+      p3Authors: "Maisonnave Nathan, Lamaison Enzo, M1 IREF.",
       
       p4Title: "Kanto Pokémon Analysis – JupyterLab Project",
       p4Subject: "Conduct a comprehensive study using data science libraries in JupyterLab (pandas, numpy, matplotlib, seaborn) by building an original database.",
@@ -308,7 +322,7 @@
       p4VisuText: "A high-definition map of the Kanto region was integrated to visually contextualize the results.",
       p4LinkMap: "View the map",
       p4LinkNotebook: "Download the notebook",
-      p4Authors: "Co-author: Faidy Robin, M1 IREF",
+      p4Authors: "Faidy Robin, M1 IREF",
       
       p5Title: "Literature Review – Occupational Health Prevention",
       p5Subject: "Completion of a third-year university research project (TER) on legal obligations and organizational practices regarding occupational health.",
@@ -318,8 +332,6 @@
       p5Footer: "Produced under the supervision of Mrs. Gagnou, University of Bordeaux, 2022"
     }
   };
-
-  const switcher = document.getElementById('lang-switcher');
 
   function applyLanguage(lang) {
     const t = translations[lang];
@@ -372,7 +384,7 @@
     document.getElementById('p3-visu').innerHTML = t.p3Visu;
     document.getElementById('p3-f1').textContent = t.p3F1;
     document.getElementById('p3-f2').textContent = t.p3F2;
-    document.getElementById('p3-label-authors').nextSibling.textContent = " " + t.p3Authors.replace("Co-auteurs : ", "");
+    document.getElementById('p3-label-authors').nextSibling.textContent = " " + t.p3Authors;
 
     // Projet 4
     document.getElementById('p4-title').textContent = t.p4Title;
@@ -382,7 +394,7 @@
     document.getElementById('p4-visu').childNodes[0].textContent = t.p4VisuText + " ";
     document.getElementById('p4-link-map').textContent = t.p4LinkMap;
     document.getElementById('p4-link-notebook').textContent = t.p4LinkNotebook;
-    document.getElementById('p4-label-authors').nextSibling.textContent = " " + t.p4Authors.replace("Co-auteur : ", "");
+    document.getElementById('p4-label-authors').nextSibling.textContent = " " + t.p4Authors;
 
     // Projet 5
     document.getElementById('p5-title').textContent = t.p5Title;
@@ -394,21 +406,22 @@
     
     // Mettre à jour l'attribut global HTML lang
     document.documentElement.lang = lang;
+
+    // Mettre à jour la bordure active sur le bon drapeau
+    document.querySelectorAll('.flag-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`btn-${lang}`).classList.add('active');
   }
 
-  // Écouteur de changement du sélecteur
-  switcher.addEventListener('change', (e) => {
-    const chosenLang = e.target.value;
-    localStorage.setItem('portfolio-lang', chosenLang);
-    applyLanguage(chosenLang);
-  });
+  // Fonction appelée au clic sur un drapeau
+  function changeLanguage(lang) {
+    localStorage.setItem('portfolio-lang', lang);
+    applyLanguage(lang);
+  }
 
-  // Au chargement de la page : vérification de la mémoire ou de la langue du navigateur
+  // Au chargement initial : anglais par défaut (sauf si un choix fr a été mémorisé auparavant)
   const savedLang = localStorage.getItem('portfolio-lang');
-  const browserLang = navigator.language.startsWith('en') ? 'en' : 'fr';
-  const defaultLang = savedLang || browserLang;
+  const defaultLang = savedLang || 'en';
 
-  switcher.value = defaultLang;
   applyLanguage(defaultLang);
 </script>
 
